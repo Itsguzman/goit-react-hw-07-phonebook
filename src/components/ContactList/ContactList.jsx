@@ -1,22 +1,22 @@
-import { Items } from 'components/Items/Items';
+import React from 'react';
 import PropTypes from 'prop-types';
+import Items from '../Items/Items';
 
-export const ContactList = ({ filterContact, deleteContact }) => {
-  const filteredContacts = filterContact();
-
+export const ContactList = ({ contacts, deleteContact }) => {
   return (
     <table>
       <thead>
         <tr>
           <th>Name</th>
-          <th>Contact</th>
+          <th>Phone</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {filteredContacts.map(filteredContact => (
+        {contacts.map(contact => (
           <Items
-            key={filteredContact.id}
-            filteredContact={filteredContact}
+            key={contact.id}
+            filteredContact={contact}
             deleteContact={deleteContact}
           />
         ))}
@@ -26,6 +26,14 @@ export const ContactList = ({ filterContact, deleteContact }) => {
 };
 
 ContactList.propTypes = {
-  filterContact: PropTypes.func.isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      phone: PropTypes.string,
+    })
+  ).isRequired,
   deleteContact: PropTypes.func.isRequired,
 };
+
+export default ContactList;

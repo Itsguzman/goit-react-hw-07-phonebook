@@ -1,18 +1,31 @@
-import React from 'react';
+// App.jsx
+import React, { useEffect } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContacts, getFilter } from '../redux/selector';
-import { addContact, deleteContact } from '../redux/contactsSlice';
+import { addContact, deleteContact, fetchContacts } from '../redux/operations';
 import { setFilter } from '../redux/filterSlice';
+import {
+  selectVisibleContacts,
+  selectIsLoading,
+  selectFilter,
+  selectError,
+} from '../redux/selector';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const visibleContacts = useSelector(selectVisibleContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+  const filter = useSelector(selectFilter);
+
   const dispatch = useDispatch();
 
-  const handleaddContact = newContact => {
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const handleAddContact = newContact => {
     dispatch(addContact(newContact));
   };
 
@@ -24,19 +37,20 @@ export const App = () => {
     dispatch(setFilter(filterValue));
   };
 
-  const filterContact = () =>
-    contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm addContact={handleaddContact} contacts={contacts} />
+      <ContactForm addContact={handleAddContact} contacts={visibleContacts} />
       <h2>Contacts</h2>
       <Filter filter={filter} setFilter={handleFilterChange} />
+
+      {isLoading && (
+        <b style={{ display: 'block', padding: '0 0 20px 10px' }}>Loading...</b>
+      )}
+      {error && <b>Error: {error}</b>}
+
       <ContactList
-        filterContact={filterContact}
+        contacts={visibleContacts}
         deleteContact={handleDeleteContact}
       />
     </div>

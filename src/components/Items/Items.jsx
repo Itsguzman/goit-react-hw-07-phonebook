@@ -6,9 +6,9 @@ export const Items = ({ filteredContact, deleteContact }) => {
   };
 
   return (
-    <tr key={filteredContact.id}>
+    <tr>
       <td>{filteredContact.name}</td>
-      <td>{filteredContact.number}</td>
+      <td>{filteredContact.phone || 'No phone number provided'}</td>
       <td>
         <button onClick={handleDelete}>Delete</button>
       </td>
@@ -17,6 +17,12 @@ export const Items = ({ filteredContact, deleteContact }) => {
 };
 
 Items.propTypes = {
-  filteredContact: PropTypes.object.isRequired,
+  filteredContact: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    phone: PropTypes.string,
+  }).isRequired,
   deleteContact: PropTypes.func.isRequired,
 };
+
+export default Items;

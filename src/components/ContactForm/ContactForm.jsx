@@ -5,20 +5,20 @@ import css from './contact.module.css';
 
 export const ContactForm = ({ addContact, contacts }) => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleNameChange = e => {
     setName(e.target.value);
   };
 
-  const handleNumberChange = e => {
-    setNumber(e.target.value);
+  const handlePhoneChange = e => {
+    setPhone(e.target.value);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (name.trim() === '' || number.trim() === '') {
+    if (name.trim() === '' || phone.trim() === '') {
       return;
     }
 
@@ -34,11 +34,11 @@ export const ContactForm = ({ addContact, contacts }) => {
     addContact({
       id: nanoid(),
       name: name.trim(),
-      number: number.trim(),
+      phone: phone.trim(),
     });
 
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -53,15 +53,15 @@ export const ContactForm = ({ addContact, contacts }) => {
         value={name}
         onChange={handleNameChange}
       />
-      <label>Number</label>
+      <label>Phone</label>
       <input
         type="tel"
-        name="number"
+        name="phone"
         pattern="\+?\d{1,4}?[\-.\s]?\(?\d{1,3}?\)?[\-.\s]?\d{1,4}[\-.\s]?\d{1,4}[\-.\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
-        value={number}
-        onChange={handleNumberChange}
+        value={phone}
+        onChange={handlePhoneChange}
       />
       <button type="submit">Add contact</button>
     </form>
@@ -74,9 +74,9 @@ ContactForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
+      phone: PropTypes.string,
     })
-  ),
+  ).isRequired,
 };
 
 export default ContactForm;
